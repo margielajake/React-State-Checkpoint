@@ -1,4 +1,3 @@
-import cloth from './cloth.jpg';
 import './App.css';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -8,23 +7,19 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { 
-    fullName: '',
-    bio: '',
-    imgSrc:'',
-    profession: '',
-    secondsSinceMount: 0
-   }
+    this.state = {
+      secondsSinceMount: 0,
+      
+      person: {
+        fullName: 'Jake Campbell',
+        bio: 'Here to be creative and innovative.',
+        imgSrc: './cloth.jpg',
+        profession: 'Designer',
+      },
+      
+      show: false,
+    };
   }
-
-   person = () => {
-    this.setState({
-      fullName: 'Jake Campbell',
-      bio: 'Here to be creative and innovative',
-      imgSrc: cloth,
-      profession: 'Designer'
-    })
-   }
 
    componentDidMount() {
     this.interval = setInterval(() => {
@@ -35,16 +30,26 @@ class App extends Component {
   componentWillUnmount() {
     clearInterval(this.interval);
   }
+
+  toggleShow = () => {
+    this.setState({ show: !this.state.show });
+  }
    
   render() { 
+    const { fullName, bio, imgSrc, profession } = this.state.person;
+    const { show } = this.state;
+
     return ( <>
     <p>Time since last mount: {this.state.secondsSinceMount} seconds</p>
-    <h3>{this.state.fullName}</h3>
-    <h3>{this.state.bio}</h3>
-    <h3>{this.state.profession}</h3>
-    <img src={this.person.imgSrc} alt="Cloth" />
-
-    <button type='button' style={btnStyle} onClick={this.person}>View Profile</button>
+    <button style={btnStyle} onClick={this.toggleShow}>View Profile</button>
+        {show && (
+          <div>
+            <h1>{fullName}</h1>
+            <img src={imgSrc} alt={fullName} style = {{width: 144, height: 180}} />
+            <p>{bio}</p>
+            <p>Profession: {profession}</p>
+          </div>
+        )}
     </> );
   }
 }
